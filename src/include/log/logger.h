@@ -1,4 +1,5 @@
 #pragma once
+#include <stdio.h>
 #include <string.h>
 
 #include <string>
@@ -11,10 +12,10 @@
 #define LOG_INFO(logmsgformat, ...)                                  \
     do {                                                             \
         Logger &logger = Logger::GetInstance();                      \
-        char buffer[128 + 1024] = {0};                               \
-        snprintf(buffer, 128, "[INFO] %s:%d |", __FILE__, __LINE__); \
-        char msg[1024] = {0};                                        \
-        snprintf(msg, 1024, logmsgformat, ##__VA_ARGS__);            \
+        char buffer[2048 + 2048] = {0};                               \
+        snprintf(buffer, 2048, "[INFO] %s:%d | ", __FILE__, __LINE__); \
+        char msg[2048] = {0};                                        \
+        snprintf(msg, 2048, logmsgformat, ##__VA_ARGS__);            \
         strcat(buffer, msg);                                         \
         logger.Log(buffer);                                          \
     } while (0)
@@ -22,11 +23,12 @@
 #define LOG_ERROR(logmsgformat, ...)                                  \
     do {                                                              \
         Logger &logger = Logger::GetInstance();                       \
-        char buffer[128 + 1024] = {0};                                \
-        snprintf(buffer, 128, "[ERROR] %s:%d |", __FILE__, __LINE__); \
-        char msg[1024] = {0};                                         \
-        snprintf(msg, 1024, logmsgformat, ##__VA_ARGS__);             \
+        char buffer[2048 + 2048] = {0};                                \
+        snprintf(buffer, 2048, "[ERROR] %s:%d | ", __FILE__, __LINE__); \
+        char msg[2048] = {0};                                         \
+        snprintf(msg, 2048, logmsgformat, ##__VA_ARGS__);             \
         strcat(buffer, msg);                                          \
+        fprintf(stderr, "%s\n\n", buffer);                                \
         logger.Log(buffer);                                           \
     } while (0)
 
