@@ -8,6 +8,7 @@ include_directories(src/include/database)
 include_directories(src/include/database/mysql)
 include_directories(src/include/database/sqlite)
 include_directories(src/include/log)
+include_directories(src/include/model)
 
 
 add_subdirectory(src)
