@@ -23,6 +23,14 @@ message("Found REDIS_PLUS_PLUS_HEADER: ${REDIS_PLUS_PLUS_HEADER}")
 message("Found REDIS_PLUS_PLUS_LIB: ${REDIS_PLUS_PLUS_LIB}")
 include_directories(${REDIS_PLUS_PLUS_HEADER})
 
+# <------------ add cppkafka dependency --------------->
+find_package(CppKafka REQUIRED)
+
+# <------------ add boost dependency --------------->
+FIND_PACKAGE(Boost COMPONENTS program_options REQUIRED)
+include_directories(${Boost_INCLUDE_DIRS})
+
+
 include_directories(thirdparty)
 include_directories(src/include)
 include_directories(src/include/database)
