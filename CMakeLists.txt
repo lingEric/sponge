@@ -38,6 +38,7 @@ include_directories(src/include/database/mysql)
 include_directories(src/include/database/sqlite)
 include_directories(src/include/log)
 include_directories(src/include/model)
+include_directories(src/include/threadpool)
 
 
 add_subdirectory(src)
