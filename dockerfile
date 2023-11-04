@@ -2,7 +2,8 @@ FROM ubuntu:22.04
 ENV TARGET_APP=server
 
 RUN apt update
-RUN apt install -y libmysqlcppconn-dev librdkafka-dev build-essential cmake libssl-dev zlib1g-dev libboost-dev libboost-program-options-dev
+RUN apt install -y libmysqlcppconn-dev librdkafka-dev build-essential cmake \
+libssl-dev zlib1g-dev libboost-dev libboost-program-options-dev libzookeeper-mt-dev
 
 
 RUN mkdir -p /sponge
@@ -12,7 +13,7 @@ COPY . /sponge
 RUN mkdir -p /sponge/dependencies/cppkafka/build
 RUN rm -rf /sponge/dependencies/cppkafka/build/*
 WORKDIR /sponge/dependencies/cppkafka/build
-RUN cmake -DCPPKAFKA_DISABLE_EXAMPLES=ON ..
+RUN cmake -DCPPKAFKA_DISABLE_EXAMPLES=ON -DCPPKAFKA_DISABLE_TESTS=ON ..
 RUN make -j2
 RUN make install
 
