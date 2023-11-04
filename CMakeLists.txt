@@ -7,17 +7,17 @@ option(SPONGE_DISABLE_TESTS "Disable build of sponge tests." OFF)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 
 # Set the source directory of your configuration files
-# set(CONFIG_FILES
-#     ${PROJECT_SOURCE_DIR}/config_file1.txt
-#     ${PROJECT_SOURCE_DIR}/config_file2.txt
-#     ${PROJECT_SOURCE_DIR}/config_file3.txt
-# )
+set(CONFIG_FILES
+    ${PROJECT_SOURCE_DIR}/mysql.cnf
+    # ${PROJECT_SOURCE_DIR}/config_file2.txt
+    # ${PROJECT_SOURCE_DIR}/config_file3.txt
+)
 
 # Set the destination directory of your configuration files in the build directory
-# set(CONFIG_FILES_DESTINATION ${PROJECT_SOURCE_DIR}/bin)
+set(CONFIG_FILES_DESTINATION ${PROJECT_SOURCE_DIR}/bin)
 
 # Copy the configuration files from the source directory to the build directory
-# file(COPY ${CONFIG_FILES} DESTINATION ${CONFIG_FILES_DESTINATION})
+file(COPY ${CONFIG_FILES} DESTINATION ${CONFIG_FILES_DESTINATION})
 
 
 
@@ -50,6 +50,14 @@ find_package(CppKafka REQUIRED)
 FIND_PACKAGE(Boost COMPONENTS program_options REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 
+# <------------ add zookeeper c client dependency --------------->
+find_path(ZOOKEEPER_MT_HEADER zookeeper)
+find_library(ZOOKEEPER_MT_LIB zookeeper_mt)
+
+message("Found ZOOKEEPER_MT_HEADER: ${ZOOKEEPER_MT_HEADER}")
+message("Found ZOOKEEPER_MT_LIB: ${ZOOKEEPER_MT_LIB}")
+include_directories(${ZOOKEEPER_MT_HEADER})
+
 
 
 include_directories(thirdparty)
@@ -61,6 +69,7 @@ include_directories(src/include/log)
 include_directories(src/include/model)
 include_directories(src/include/threadpool)
 include_directories(src/include/server)
+include_directories(src/include/zookeeper)
 
 
 add_subdirectory(src)
