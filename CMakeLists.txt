@@ -26,9 +26,19 @@ file(COPY ${CONFIG_FILES} DESTINATION ${CONFIG_FILES_DESTINATION})
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# <------------ add muduo dependency --------------->
+find_path(MUDUO_HEADER muduo REQUIRED)
+find_library(MUDUO_BASE_LIB muduo_base REQUIRED)
+find_library(MUDUO_NET_LIB muduo_net REQUIRED)
+
+message("Found MUDUO_HEADER: ${MUDUO_HEADER}")
+message("Found MUDUO_BASE_LIB: ${MUDUO_BASE_LIB}")
+message("Found MUDUO_NET_LIB: ${MUDUO_NET_LIB}")
+include_directories(${MUDUO_HEADER})
+
 # <------------ add hiredis dependency --------------->
-find_path(HIREDIS_HEADER hiredis)
-find_library(HIREDIS_LIB hiredis)
+find_path(HIREDIS_HEADER hiredis REQUIRED)
+find_library(HIREDIS_LIB hiredis REQUIRED)
 
 message("Found HIREDIS_HEADER: ${HIREDIS_HEADER}")
 message("Found HIREDIS_LIB: ${HIREDIS_LIB}")
@@ -36,8 +46,8 @@ include_directories(${HIREDIS_HEADER})
 
 # <------------ add redis-plus-plus dependency -------------->
 # NOTE: this should be *sw* NOT *redis++*
-find_path(REDIS_PLUS_PLUS_HEADER sw)
-find_library(REDIS_PLUS_PLUS_LIB redis++)
+find_path(REDIS_PLUS_PLUS_HEADER sw REQUIRED)
+find_library(REDIS_PLUS_PLUS_LIB redis++ REQUIRED)
 
 message("Found REDIS_PLUS_PLUS_HEADER: ${REDIS_PLUS_PLUS_HEADER}")
 message("Found REDIS_PLUS_PLUS_LIB: ${REDIS_PLUS_PLUS_LIB}")
@@ -51,7 +61,7 @@ include_directories(src/include/database/mysql)
 include_directories(src/include/log)
 include_directories(src/include/model)
 include_directories(src/include/threadpool)
-include_directories(src/include/server)
+include_directories(src/include/service)
 
 
 add_subdirectory(src)

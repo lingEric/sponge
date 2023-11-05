@@ -9,16 +9,16 @@ using namespace muduo;
 using namespace muduo::net;
 using namespace placeholders;
 
-class ChatServer {
+class SpongeServer {
 public:
-    ChatServer(EventLoop *loop, const InetAddress &listenAddr,
+    SpongeServer(EventLoop *loop, const InetAddress &listenAddr,
                const string &nameArg)
         : _server(loop, listenAddr, nameArg), _loop(loop) {
         _server.setConnectionCallback(
-            std::bind(&ChatServer::onConnection, this, _1));
+            std::bind(&SpongeServer::onConnection, this, _1));
 
         _server.setMessageCallback(
-            std::bind(&ChatServer::onMessage, this, _1, _2, _3));
+            std::bind(&SpongeServer::onMessage, this, _1, _2, _3));
 
         _server.setThreadNum(4);
     }
@@ -52,7 +52,7 @@ private:
 int main() {
     EventLoop loop;
     InetAddress addr("0.0.0.0", 8000);
-    ChatServer server(&loop, addr, "ChatServer");
+    SpongeServer server(&loop, addr, "ChatServer");
 
     server.start();  // listenfd epoll_ctl=>epoll
     loop.loop();  // epoll_wait以阻塞方式等待新用户连接，已连接用户的读写事件等
