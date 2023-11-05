@@ -41,7 +41,7 @@ WORKDIR /sponge/build
 RUN cmake -DCMAKE_BUILD_TYPE=release ..
 RUN make -j2
 
-WORKDIR /sponge
+WORKDIR /sponge/logs
 RUN chmod +x /sponge/entrypoint.sh
 ENTRYPOINT ["/sponge/entrypoint.sh"]
 # CMD ["/bin/bash", "-i"]
