@@ -35,8 +35,10 @@ RUN make install
 # build sponge
 RUN mkdir -p /sponge/build
 RUN rm -rf /sponge/build/*
+RUN rm -rf /sponge/bin/*
 WORKDIR /sponge/build
-RUN cmake -DCMAKE_BUILD_TYPE=release -DSPONGE_DISABLE_EXAMPLES=ON -DSPONGE_DISABLE_TESTS=ON ..
+# RUN cmake -DCMAKE_BUILD_TYPE=release -DSPONGE_DISABLE_EXAMPLES=ON -DSPONGE_DISABLE_TESTS=ON ..
+RUN cmake -DCMAKE_BUILD_TYPE=release ..
 RUN make -j2
 
 WORKDIR /sponge
