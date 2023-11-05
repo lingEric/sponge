@@ -51,7 +51,7 @@ private:
 
 int main() {
     EventLoop loop;
-    InetAddress addr("127.0.0.1", 6000);
+    InetAddress addr("0.0.0.0", 8000);
     ChatServer server(&loop, addr, "ChatServer");
 
     server.start();  // listenfd epoll_ctl=>epoll
