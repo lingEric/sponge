@@ -1,5 +1,7 @@
 #include "friendmodel.h"
 
+#include <cppconn/exception.h>
+
 #include "logger.h"
 #include "mysqlconnectionpool.h"
 bool FriendModel::insert(int userId, int friendId) {
@@ -8,7 +10,12 @@ bool FriendModel::insert(int userId, int friendId) {
              "insert into friend(userid, friendid) values(%d, %d)", userId,
              friendId);
     LOG_INFO("%s | %s", __func__, sql);
-    return MysqlConnectionPool::getInstance().getConnection()->update(sql);
+    try {
+        return MysqlConnectionPool::getInstance().getConnection()->update(sql);
+    } catch (sql::SQLException e) {
+        LOG_ERROR("%s | %s", __func__, e.what());
+        return false;
+    }
 }
 
 std::vector<User> FriendModel::query(int userId) {
@@ -21,8 +28,13 @@ std::vector<User> FriendModel::query(int userId) {
     LOG_INFO("%s | %s", __func__, sql);
     std::vector<User> vec;
 
-    std::shared_ptr<sql::ResultSet> rs =
-        MysqlConnectionPool::getInstance().getConnection()->query(sql);
+    std::shared_ptr<sql::ResultSet> rs;
+    try {
+        rs = MysqlConnectionPool::getInstance().getConnection()->query(sql);
+    } catch (sql::SQLException e) {
+        LOG_ERROR("%s | %s", __func__, e.what());
+        return vec;
+    }
     while (rs->next()) {
         vec.emplace_back(User(rs->getInt("id"), rs->getString("name"), "",
                               rs->getString("state")));

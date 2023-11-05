@@ -1,5 +1,7 @@
 #include "groupmodel.h"
 
+#include <cppconn/exception.h>
+
 #include <vector>
 
 #include "logger.h"
@@ -11,7 +13,12 @@ bool GroupModel::createGroup(Group &group) {
              group.name().c_str(), group.desc().c_str());
     LOG_INFO("%s | %s", __func__, sql);
 
-    return MysqlConnectionPool::getInstance().getConnection()->update(sql);
+    try {
+        return MysqlConnectionPool::getInstance().getConnection()->update(sql);
+    } catch (sql::SQLException e) {
+        LOG_ERROR("%s | %s", __func__, e.what());
+        return false;
+    }
 }
 
 bool GroupModel::addGroup(int userId, int groupId, std::string role) {
@@ -22,7 +29,12 @@ bool GroupModel::addGroup(int userId, int groupId, std::string role) {
         groupId, userId, role.c_str());
     LOG_INFO("%s | %s", __func__, sql);
 
-    return MysqlConnectionPool::getInstance().getConnection()->update(sql);
+    try {
+        return MysqlConnectionPool::getInstance().getConnection()->update(sql);
+    } catch (sql::SQLException e) {
+        LOG_ERROR("%s | %s", __func__, e.what());
+        return false;
+    }
 }
 
 std::vector<Group> GroupModel::queryGroups(int userId) {
@@ -32,10 +44,15 @@ std::vector<Group> GroupModel::queryGroups(int userId) {
          groupuser b on a.id = b.groupid where b.userid=%d",
              userId);
     LOG_INFO("%s | %s", __func__, sql);
-
-    std::shared_ptr<sql::ResultSet> rs =
-        MysqlConnectionPool::getInstance().getConnection()->query(sql);
     std::vector<Group> vec;
+    std::shared_ptr<sql::ResultSet> rs;
+    try {
+        rs = MysqlConnectionPool::getInstance().getConnection()->query(sql);
+    } catch (sql::SQLException e) {
+        LOG_ERROR("%s | %s", __func__, e.what());
+        return vec;
+    }
+
     while (rs->next()) {
         vec.emplace_back(Group(rs->getInt("id"), rs->getString("name"),
                                rs->getString("description")));
@@ -45,15 +62,20 @@ std::vector<Group> GroupModel::queryGroups(int userId) {
 
 std::vector<Group> GroupModel::queryGroups(std::string groupname) {
     char sql[1024] = {0};
-    snprintf(
-        sql, sizeof(sql),
-        "select a.id, a.name, a.description from `group` a where a.name like '%%%s%%'",
-        groupname.c_str());
+    snprintf(sql, sizeof(sql),
+             "select a.id, a.name, a.description from `group` a where a.name "
+             "like '%%%s%%'",
+             groupname.c_str());
     LOG_INFO("%s | %s", __func__, sql);
 
-    std::shared_ptr<sql::ResultSet> rs =
-        MysqlConnectionPool::getInstance().getConnection()->query(sql);
     std::vector<Group> vec;
+    std::shared_ptr<sql::ResultSet> rs;
+    try {
+        rs = MysqlConnectionPool::getInstance().getConnection()->query(sql);
+    } catch (sql::SQLException e) {
+        LOG_ERROR("%s | %s", __func__, e.what());
+        return vec;
+    }
     while (rs->next()) {
         vec.emplace_back(Group(rs->getInt("id"), rs->getString("name"),
                                rs->getString("description")));
@@ -67,9 +89,14 @@ std::vector<int> GroupModel::queryGroupUsers(int groupId) {
              "select userid from groupuser where groupid = %d", groupId);
     LOG_INFO("%s | %s", __func__, sql);
 
-    std::shared_ptr<sql::ResultSet> rs =
-        MysqlConnectionPool::getInstance().getConnection()->query(sql);
     std::vector<int> vec;
+    std::shared_ptr<sql::ResultSet> rs;
+    try {
+        rs = MysqlConnectionPool::getInstance().getConnection()->query(sql);
+    } catch (sql::SQLException e) {
+        LOG_ERROR("%s | %s", __func__, e.what());
+        return vec;
+    }
     while (rs->next()) {
         vec.emplace_back(rs->getInt("userid"));
     }

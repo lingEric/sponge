@@ -1,5 +1,7 @@
 #include "usermodel.h"
 
+#include <cppconn/exception.h>
+
 #include "logger.h"
 #include "mysqlconnectionpool.h"
 bool UserModel::insert(User &user) {
@@ -10,7 +12,12 @@ bool UserModel::insert(User &user) {
              user.state().c_str());
     LOG_INFO("%s | %s", __func__, sql);
 
-    return MysqlConnectionPool::getInstance().getConnection()->update(sql);
+    try {
+        return MysqlConnectionPool::getInstance().getConnection()->update(sql);
+    } catch (sql::SQLException e) {
+        LOG_ERROR("%s | %s", __func__, e.what());
+        return false;
+    }
 }
 
 User UserModel::query(int userId) {
@@ -20,9 +27,14 @@ User UserModel::query(int userId) {
              userId);
     LOG_INFO("%s | %s", __func__, sql);
 
-    std::shared_ptr<sql::ResultSet> rs =
-        MysqlConnectionPool::getInstance().getConnection()->query(sql);
     User user;
+    std::shared_ptr<sql::ResultSet> rs;
+    try {
+        rs = MysqlConnectionPool::getInstance().getConnection()->query(sql);
+    } catch (sql::SQLException e) {
+        LOG_ERROR("%s | %s", __func__, e.what());
+        return user;
+    }
     while (rs->next()) {
         user = User(rs->getInt("id"), rs->getString("name"),
                     rs->getString("password"), rs->getString("state"));
@@ -36,10 +48,20 @@ bool UserModel::updateState(int userId, std::string state) {
              state.c_str(), userId);
     LOG_INFO("%s | %s", __func__, sql);
 
-    return MysqlConnectionPool::getInstance().getConnection()->update(sql);
+    try {
+        return MysqlConnectionPool::getInstance().getConnection()->update(sql);
+    } catch (sql::SQLException e) {
+        LOG_ERROR("%s | %s", __func__, e.what());
+        return false;
+    }
 }
 
 bool UserModel::offlineAll() {
-    return MysqlConnectionPool::getInstance().getConnection()->update(
-        "update user set state='offline'");
+    try {
+        return MysqlConnectionPool::getInstance().getConnection()->update(
+            "update user set state='offline'");
+    } catch (sql::SQLException e) {
+        LOG_ERROR("%s | %s", __func__, e.what());
+        return false;
+    }
 }
