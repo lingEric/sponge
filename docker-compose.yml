@@ -19,8 +19,25 @@ services:
       - redis_vol:/data
     ports:
       - 6379:6379
-
+  
+  server-1:
+    image: server-1
+    container_name: server-1
+    environment:
+      - TARGET_APP=testmuduo
+    build:
+      context: .
+      dockerfile: dockerfile
+    # command: ["arg1", "arg2", "arg3"]
+    volumes:
+      - server1_vol:/sponge/logs
+    ports:
+      - 8000:8000
+    depends_on:
+      - mysql
+      - redis
 
 volumes:
   mysql_vol: {}
   redis_vol: {}
+  server1_vol: {}
