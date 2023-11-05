@@ -43,33 +43,15 @@ message("Found REDIS_PLUS_PLUS_HEADER: ${REDIS_PLUS_PLUS_HEADER}")
 message("Found REDIS_PLUS_PLUS_LIB: ${REDIS_PLUS_PLUS_LIB}")
 include_directories(${REDIS_PLUS_PLUS_HEADER})
 
-# <------------ add cppkafka dependency --------------->
-find_package(CppKafka REQUIRED)
-
-# <------------ add boost dependency --------------->
-FIND_PACKAGE(Boost COMPONENTS program_options REQUIRED)
-include_directories(${Boost_INCLUDE_DIRS})
-
-# <------------ add zookeeper c client dependency --------------->
-find_path(ZOOKEEPER_MT_HEADER zookeeper)
-find_library(ZOOKEEPER_MT_LIB zookeeper_mt)
-
-message("Found ZOOKEEPER_MT_HEADER: ${ZOOKEEPER_MT_HEADER}")
-message("Found ZOOKEEPER_MT_LIB: ${ZOOKEEPER_MT_LIB}")
-include_directories(${ZOOKEEPER_MT_HEADER})
-
-
 
 include_directories(thirdparty)
 include_directories(src/include)
 include_directories(src/include/database)
 include_directories(src/include/database/mysql)
-include_directories(src/include/database/sqlite)
 include_directories(src/include/log)
 include_directories(src/include/model)
 include_directories(src/include/threadpool)
 include_directories(src/include/server)
-include_directories(src/include/zookeeper)
 
 
 add_subdirectory(src)

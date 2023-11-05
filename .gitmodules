@@ -7,6 +7,3 @@
 [submodule "dependencies/redis-plus-plus"]
 	path = dependencies/redis-plus-plus
 	url = https://github.com/sewenew/redis-plus-plus.git
-[submodule "dependencies/cppkafka"]
-	path = dependencies/cppkafka
-	url = https://github.com/mfontanini/cppkafka.git
