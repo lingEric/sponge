@@ -26,6 +26,7 @@ int ConnectionHandler::delConnection(int userId) {
     auto it = _userConnMap.find(userId);
     if (it != _userConnMap.end()) {
         _userConnMap.erase(it);
+        return userId;
     }
     return -1;  // 未知的用户Id
 }

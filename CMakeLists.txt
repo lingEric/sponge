@@ -62,6 +62,7 @@ include_directories(src/include/log)
 include_directories(src/include/model)
 include_directories(src/include/threadpool)
 include_directories(src/include/service)
+include_directories(src/include/server)
 
 
 add_subdirectory(src)

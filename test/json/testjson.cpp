@@ -43,5 +43,11 @@ int main() {
     std::cout << map2[1] << std::endl;
 
     // 以下代码抛出异常
-    // std::cout << js["invalid"];
+    // int num = js["invalid-key"];
+    // std::cout << num << std::endl;
+
+    js["null"] = "null";
+    std::cout << js["null"] << std::endl;
+    std::cout << js.contains("null") << std::endl;
+    std::cout << js["invalid"];
 }
