@@ -1,6 +1,7 @@
 #include "spongeserver.h"
 
 #include <functional>
+#include <string>
 
 #include "logger.h"
 #include "msgdispatcher.h"
@@ -53,8 +54,16 @@ void SpongeServer::onMessage(const muduo::net::TcpConnectionPtr &conn,
 }
 
 int main(int argc, char **argv) {
+    if (argc < 3) {
+        std::cerr << "Usage: " << argv[0] << " ip port" << std::endl;
+        return 1;
+    }
+
+    std::string ip = argv[1];
+    std::string port = argv[2];
+
     muduo::net::EventLoop loop;
-    muduo::net::InetAddress addr("0.0.0.0", 6000);
+    muduo::net::InetAddress addr(ip, std::stoi(port));
     SpongeServer server(&loop, addr, "SPONGE-SERVER");
 
     server.start();
