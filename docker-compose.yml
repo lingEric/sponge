@@ -21,14 +21,13 @@ services:
       - 6379:6379
   
   server-1:
-    image: server-1
     container_name: server-1
     environment:
-      - TARGET_APP=testmuduo
+      - TARGET_APP=server
     build:
       context: .
       dockerfile: dockerfile
-    # command: ["arg1", "arg2", "arg3"]
+    command: ["0.0.0.0", "8000"]
     volumes:
       - server1_vol:/sponge/logs
     ports:
