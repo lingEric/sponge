@@ -13,7 +13,16 @@ bool UserModel::insert(User &user) {
     LOG_INFO("%s | %s", __func__, sql);
 
     try {
-        return MysqlConnectionPool::getInstance().getConnection()->update(sql);
+        std::shared_ptr<MysqlConnection> conn =
+            MysqlConnectionPool::getInstance().getConnection();
+        bool flag = conn->update(sql);
+        // use the same connection immediately to get the auto_increment column
+        std::shared_ptr<sql::ResultSet> rs =
+            conn->query("SELECT LAST_INSERT_ID()");
+        while (rs->next()) {
+            user.setId(rs->getInt(1));
+        }
+        return flag;
     } catch (sql::SQLException e) {
         LOG_ERROR("%s | %s", __func__, e.what());
         return false;
