@@ -20,7 +20,7 @@ Logger::Logger() {
             tm *nowtm = localtime(&now);
 
             char file_name[128];
-            snprintf(file_name, sizeof(file_name), "%d-%d-%d-log.txt",
+            snprintf(file_name, sizeof(file_name), "../logs/%d-%d-%d-log.txt",
                      nowtm->tm_year + 1900, nowtm->tm_mon + 1, nowtm->tm_mday);
 
             // 存在则追加(a)，不存在则创建该文件(+)
