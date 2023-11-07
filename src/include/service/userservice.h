@@ -3,10 +3,7 @@
 #include <muduo/base/Timestamp.h>
 #include <muduo/net/TcpConnection.h>
 
-#include <functional>
 #include <json.hpp>
-#include <mutex>
-#include <unordered_map>
 
 #include "usermodel.h"
 
