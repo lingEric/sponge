@@ -41,6 +41,9 @@ RUN cmake -DCMAKE_BUILD_TYPE=release -DSPONGE_DISABLE_EXAMPLES=ON -DSPONGE_DISAB
 # RUN cmake -DCMAKE_BUILD_TYPE=release ..
 RUN make -j2
 
+# 修改容器中的数据库ip地址
+RUN sed -i 's/localhost/mysql/g' /sponge/bin/mysql.cnf
+
 WORKDIR /sponge/bin
 RUN chmod +x /sponge/entrypoint.sh
 ENTRYPOINT ["/sponge/entrypoint.sh"]
