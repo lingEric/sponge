@@ -45,12 +45,11 @@ void SpongeServer::onMessage(const muduo::net::TcpConnectionPtr &conn,
         MsgTypeEnum msgType =
             static_cast<MsgTypeEnum>(js["msgType"].get<int>());
         msghandler = MsgDispatcher::instance().getMsgHandler(msgType);
+        msghandler(conn, js, timestamp);
     } catch (nlohmann::json::exception e) {
-        msghandler = MsgDispatcher::instance().getMsgHandler(
-            MsgTypeEnum::PARSE_JSON_ERROR);
+        MsgDispatcher::instance().getMsgHandler(MsgTypeEnum::PARSE_JSON_ERROR)(
+            conn, js, timestamp);
     }
-
-    msghandler(conn, js, timestamp);
 }
 
 int main(int argc, char **argv) {
