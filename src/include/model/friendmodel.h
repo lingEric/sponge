@@ -9,4 +9,7 @@ public:
 
     // 返回用户好友列表
     std::vector<User> query(int userId);
+
+    // 删除好友关系
+    bool deleteFriend(int fromId, int toId);
 };

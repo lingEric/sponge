@@ -18,6 +18,20 @@ bool FriendModel::insert(int userId, int friendId) {
     }
 }
 
+bool FriendModel::deleteFriend(int userId, int friendId) {
+    char sql[1024] = {0};
+    snprintf(sql, sizeof(sql),
+             "delete from friend where userid=%d and friendid=%d", userId,
+             friendId);
+    LOG_INFO("%s | %s", __func__, sql);
+    try {
+        return MysqlConnectionPool::getInstance().getConnection()->update(sql);
+    } catch (sql::SQLException e) {
+        LOG_ERROR("%s | %s", __func__, e.what());
+        return false;
+    }
+}
+
 std::vector<User> FriendModel::query(int userId) {
     char sql[1024] = {0};
 

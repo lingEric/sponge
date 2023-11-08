@@ -2,6 +2,7 @@
 
 #include <functional>
 
+#include "friendservice.h"
 #include "msgtypeenum.h"
 #include "userchatservice.h"
 #include "userservice.h"
@@ -40,6 +41,26 @@ MsgDispatcher::MsgDispatcher() {
     _msgHandlerMap[MsgTypeEnum::USER_CHAT] = std::bind(
         &UserChatService::userChat, std::ref(UserChatService::instance()),
         std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+
+    // 请求添加好友消息
+    _msgHandlerMap[MsgTypeEnum::FRIEND_REQUEST] = std::bind(
+        &FriendService::requestAddFriend, std::ref(FriendService::instance()),
+        std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+    // 添加好友关系
+    _msgHandlerMap[MsgTypeEnum::FRIEND_Add] = std::bind(
+        &FriendService::addFriend, std::ref(FriendService::instance()),
+        std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+    // 删除好友关系
+    _msgHandlerMap[MsgTypeEnum::FRIEND_DELETE] = std::bind(
+        &FriendService::delFriend, std::ref(FriendService::instance()),
+        std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+    // 查询好友关系
+    _msgHandlerMap[MsgTypeEnum::FRIEND_QUERY] = std::bind(
+        &FriendService::allFriends, std::ref(FriendService::instance()),
+        std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+    
+    
+
     // 常规响应
     _msgHandlerMap[MsgTypeEnum::NORMAL_ACK] =
         [](const muduo::net::TcpConnectionPtr &conn, nlohmann::json &js,

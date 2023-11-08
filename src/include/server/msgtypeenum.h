@@ -2,11 +2,19 @@
 
 enum class MsgTypeEnum {
     // 请求处理
+    //-----用户------
     USER_LOGIN = 1,   // 用户登录请求
     USER_REG = 2,     // 用户注册请求
     USER_LOGOUT = 3,  // 用户注销请求
 
-    USER_CHAT = 4,    // 用户聊天消息
+    //-----聊天------
+    USER_CHAT = 4,  // 用户聊天消息
+
+    //-----好友------
+    FRIEND_REQUEST = 5,  // 请求添加好友
+    FRIEND_Add = 6,      // 添加好友关系
+    FRIEND_DELETE = 7,   // 删除好友关系
+    FRIEND_QUERY = 8,    // 查询好友关系
 
     // 响应处理
     NORMAL_ACK = 200,  // 常规响应
