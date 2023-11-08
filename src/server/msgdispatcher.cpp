@@ -3,6 +3,7 @@
 #include <functional>
 
 #include "msgtypeenum.h"
+#include "userchatservice.h"
 #include "userservice.h"
 
 MsgDispatcher &MsgDispatcher::instance() {
@@ -35,6 +36,10 @@ MsgDispatcher::MsgDispatcher() {
         &UserService::logout, std::ref(UserService::instance()),
         std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
 
+    // 用户聊天消息
+    _msgHandlerMap[MsgTypeEnum::USER_CHAT] = std::bind(
+        &UserChatService::userChat, std::ref(UserChatService::instance()),
+        std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
     // 常规响应
     _msgHandlerMap[MsgTypeEnum::NORMAL_ACK] =
         [](const muduo::net::TcpConnectionPtr &conn, nlohmann::json &js,

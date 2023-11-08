@@ -6,6 +6,8 @@ enum class MsgTypeEnum {
     USER_REG = 2,     // 用户注册请求
     USER_LOGOUT = 3,  // 用户注销请求
 
+    USER_CHAT = 4,    // 用户聊天消息
+
     // 响应处理
     NORMAL_ACK = 200,  // 常规响应
 

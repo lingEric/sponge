@@ -6,6 +6,8 @@
 #include "logger.h"
 #include "msgdispatcher.h"
 #include "msgtypeenum.h"
+#include "redisconnectionpool.h"
+#include "connectionhandler.h"
 #include "userservice.h"
 SpongeServer::SpongeServer(muduo::net::EventLoop *loop,
                            const muduo::net::InetAddress &listenAddr,
@@ -17,6 +19,37 @@ SpongeServer::SpongeServer(muduo::net::EventLoop *loop,
         std::bind(&SpongeServer::onMessage, this, std::placeholders::_1,
                   std::placeholders::_2, std::placeholders::_3));
     _server.setThreadNum(4);
+
+    // 订阅redis消息
+    sw::redis::Subscriber& sub = RedisConnectionPool::instance().getSubscriber();
+    sub.psubscribe("sponge-user-*");
+    // 设置回调函数
+    sub.on_pmessage(
+        [](std::string pattern, std::string channel, std::string msg) {
+            std::string str = channel;
+            std::string prefix = "sponge-user-";
+            int userId;
+
+            if (str.substr(0, prefix.size()) == prefix) {
+                userId = std::stoi(str.substr(prefix.size()));
+                ConnectionHandler::instance().forwardMsg(userId, msg);
+            } else {
+                // 非相关通道下的消息
+            }
+        });
+    // 开启单独的子线程消费
+    std::thread t([&]() {
+        while (true) {
+            try {
+                sub.consume();
+            } catch (const sw::redis::Error& err) {
+                LOG_ERROR("%s | catched redis error, reason:%s", __func__,
+                          err.what());
+            }
+        }
+    });
+    t.detach();
+    
 }
 
 void SpongeServer::start() {
