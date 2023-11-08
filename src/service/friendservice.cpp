@@ -5,6 +5,7 @@
 
 #include "connectionhandler.h"
 #include "msgdispatcher.h"
+#include "msgtypeenum.h"
 #include "redisconnectionpool.h"
 
 void FriendService::addFriend(const muduo::net::TcpConnectionPtr &conn,
@@ -49,6 +50,8 @@ void FriendService::delFriend(const muduo::net::TcpConnectionPtr &conn,
         int fromId = js["FROMID"].get<int>();
         int toId = js["TOID"].get<int>();
         _friendModel.deleteFriend(fromId, toId);
+        MsgDispatcher::instance().getMsgHandler(MsgTypeEnum::NORMAL_ACK)(
+            conn, js, time);
     } else {
         // 不合法的json
         MsgDispatcher::instance().getMsgHandler(MsgTypeEnum::PARSE_JSON_ERROR)(
