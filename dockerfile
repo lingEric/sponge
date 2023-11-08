@@ -43,6 +43,7 @@ RUN make -j2
 
 # 修改容器中的数据库ip地址
 RUN sed -i 's/localhost/mysql/g' /sponge/bin/mysql.cnf
+RUN sed -i 's/localhost/redis/g' /sponge/bin/redis.cnf
 
 WORKDIR /sponge/bin
 RUN chmod +x /sponge/entrypoint.sh
