@@ -9,7 +9,7 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 # Set the source directory of your configuration files
 set(CONFIG_FILES
     ${PROJECT_SOURCE_DIR}/mysql.cnf
-    # ${PROJECT_SOURCE_DIR}/config_file2.txt
+    ${PROJECT_SOURCE_DIR}/redis.cnf
     # ${PROJECT_SOURCE_DIR}/config_file3.txt
 )
 
@@ -63,6 +63,7 @@ include_directories(src/include/model)
 include_directories(src/include/threadpool)
 include_directories(src/include/service)
 include_directories(src/include/server)
+include_directories(src/include/redis)
 
 
 add_subdirectory(src)
