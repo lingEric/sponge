@@ -45,8 +45,7 @@ DROP TABLE IF EXISTS `groupuser`;
 CREATE TABLE `groupuser`  (
   `groupid` int(11) NOT NULL,
   `userid` int(11) NULL DEFAULT NULL,
-  `role` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`groupid`) USING BTREE
+  `role` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -55,8 +54,7 @@ CREATE TABLE `groupuser`  (
 DROP TABLE IF EXISTS `offlinemessage`;
 CREATE TABLE `offlinemessage`  (
   `userid` int(11) NOT NULL,
-  `message` varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`userid`) USING BTREE
+  `message` varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
