@@ -16,6 +16,13 @@ enum class MsgTypeEnum {
     FRIEND_DELETE = 7,   // 删除好友关系
     FRIEND_QUERY = 8,    // 查询好友关系
 
+    //-----群聊------
+    GROUP_CHAT = 9,            // 群聊消息
+    GROUP_ADD = 10,            // 加群
+    GROUP_QUERY = 11,          // 查询所有群
+    GROUP_CREATE = 12,         // 创建群
+    GROUP_QUERY_BY_NAME = 13,  // 根据群名查询
+
     // 响应处理
     NORMAL_ACK = 200,  // 常规响应
 

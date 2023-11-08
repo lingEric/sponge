@@ -3,6 +3,7 @@
 #include <functional>
 
 #include "friendservice.h"
+#include "groupchatservice.h"
 #include "msgtypeenum.h"
 #include "userchatservice.h"
 #include "userservice.h"
@@ -58,8 +59,28 @@ MsgDispatcher::MsgDispatcher() {
     _msgHandlerMap[MsgTypeEnum::FRIEND_QUERY] = std::bind(
         &FriendService::allFriends, std::ref(FriendService::instance()),
         std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
-    
-    
+
+    // 群聊消息
+    _msgHandlerMap[MsgTypeEnum::GROUP_CHAT] = std::bind(
+        &GroupChatService::groupChat, std::ref(GroupChatService::instance()),
+        std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+    // 加群
+    _msgHandlerMap[MsgTypeEnum::GROUP_ADD] = std::bind(
+        &GroupChatService::addGroup, std::ref(GroupChatService::instance()),
+        std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+    // 查询所有群
+    _msgHandlerMap[MsgTypeEnum::GROUP_QUERY] = std::bind(
+        &GroupChatService::groups, std::ref(GroupChatService::instance()),
+        std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+    // 创建群
+    _msgHandlerMap[MsgTypeEnum::GROUP_CREATE] = std::bind(
+        &GroupChatService::createGroup, std::ref(GroupChatService::instance()),
+        std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+    // 根据群名查询
+    _msgHandlerMap[MsgTypeEnum::GROUP_QUERY_BY_NAME] =
+        std::bind(&GroupChatService::groupQuery,
+                  std::ref(GroupChatService::instance()), std::placeholders::_1,
+                  std::placeholders::_2, std::placeholders::_3);
 
     // 常规响应
     _msgHandlerMap[MsgTypeEnum::NORMAL_ACK] =
