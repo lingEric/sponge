@@ -14,6 +14,9 @@ public:
     // 删除一个在线用户的TcpConnection(用于用户正常退出登录时)
     int delConnection(int userId);
 
+    // 转发消息
+    bool forwardMsg(int toUserId, std::string msg);
+
     // 单例模式，保证线程安全
     static ConnectionHandler& instance();
     ConnectionHandler(const ConnectionHandler&) = delete;
