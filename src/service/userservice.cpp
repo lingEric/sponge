@@ -32,8 +32,6 @@ void UserService::login(const muduo::net::TcpConnectionPtr &conn,
                 // 保存TcpConnection
                 ConnectionHandler::instance().addConnection(userId, conn);
 
-                // TODO 在redis中订阅对应用户id的channel
-
                 MsgDispatcher::instance().getMsgHandler(
                     MsgTypeEnum::NORMAL_ACK)(conn, js, time);
             }
@@ -86,8 +84,6 @@ void UserService::logout(const muduo::net::TcpConnectionPtr &conn,
         userId = ConnectionHandler::instance().delConnection(userId);
         if (userId != -1) {
             // 成功删除
-            // TODO 在redis中取消订阅对应用户id的channel
-
             _userModel.updateState(userId, "offline");
             MsgDispatcher::instance().getMsgHandler(MsgTypeEnum::NORMAL_ACK)(
                 conn, js, time);
@@ -108,8 +104,6 @@ void UserService::logout(const muduo::net::TcpConnectionPtr &conn,
 void UserService::clientCloseException(
     const muduo::net::TcpConnectionPtr &conn) {
     int userId = ConnectionHandler::instance().delConnection(conn);
-
-    // TODO 在redis中取消订阅对应用户id的channel
 
     if (userId != -1) {
         _userModel.updateState(userId, "offline");
