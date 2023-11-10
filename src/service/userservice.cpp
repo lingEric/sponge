@@ -39,7 +39,7 @@ void UserService::login(const muduo::net::TcpConnectionPtr &conn,
             // 登录失败
             nlohmann::json response;
             response["msgType"] = static_cast<int>(MsgTypeEnum::NORMAL_ACK);
-            response["errno"] = 301;
+            response["errno"] = 302;
             response["msg"] = "wrong id or wrong password, try again.";
             conn->send(response.dump());
         }
